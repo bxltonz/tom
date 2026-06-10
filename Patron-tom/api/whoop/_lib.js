@@ -13,7 +13,7 @@ function getOrigin(req) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
   return proto + '://' + host;
 }
-function redirectUri(req) { return getOrigin(req) + '/api/whoop/callback'; }
+function redirectUri(req) { return process.env.WHOOP_REDIRECT_URI || (getOrigin(req) + '/api/whoop/callback'); }
 function isHttps(req) { return getOrigin(req).startsWith('https'); }
 
 function parseCookies(req) {
