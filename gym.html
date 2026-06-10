@@ -2989,20 +2989,47 @@ img, video, canvas, svg { max-width: 100%; }
       img.src = dataUrl;
     });
   }
-  async function uploadPhotoToStorage(dataUrl) {
+  async function uploadPhotoToStorage(dataUrl, entry) {
     if (!pcSupa) return null;
     try {
       const res = await fetch(dataUrl);
       const blob = await res.blob();
       const filename = 'photo_' + Date.now() + '_' +
         Math.random().toString(36).slice(2, 10) + '.jpg';
-      const { error } = await pcSupa.storage
+      const { error: storageError } = await pcSupa.storage
         .from('progress-photos')
         .upload(filename, blob, { contentType: 'image/jpeg', upsert: false });
-      if (error) return null;
+      if (storageError) return null;
       const { data } = pcSupa.storage.from('progress-photos').getPublicUrl(filename);
-      return data ? data.publicUrl : null;
+      const url = data ? data.publicUrl : null;
+      if (!url) return null;
+      await pcSupa.from('progress_photos').insert({
+        id: entry.id,
+        url,
+        date_key: entry.dateKey,
+        weight: entry.weight,
+        created_at: new Date().toISOString(),
+      });
+      return url;
     } catch (e) { return null; }
+  }
+  async function photosLoadFromTable() {
+    if (!pcSupa) return;
+    try {
+      const { data, error } = await pcSupa
+        .from('progress_photos')
+        .select('id, url, date_key, weight')
+        .order('created_at', { ascending: false });
+      if (error || !data) return;
+      const remoteIds = new Set(data.map(p => p.id));
+      const localOnly = photos.filter(p => p.dataUrl && !p.url && !remoteIds.has(p.id));
+      photos = [
+        ...data.map(p => ({ id: p.id, url: p.url, dateKey: p.date_key, weight: p.weight })),
+        ...localOnly,
+      ];
+      photosSave();
+      photosRender();
+    } catch (e) {}
   }
   function photoFmtDate(key) {
     const d = wtParseKey(key);
@@ -3061,7 +3088,7 @@ img, video, canvas, svg { max-width: 100%; }
       }
     }
     photosRender();
-    uploadPhotoToStorage(entry.dataUrl).then((url) => {
+    uploadPhotoToStorage(entry.dataUrl, entry).then((url) => {
       if (!url) return;
       const e = photos.find(p => p.id === id);
       if (!e) return;
@@ -3079,6 +3106,7 @@ img, video, canvas, svg { max-width: 100%; }
 
   $('wtProgressLink').addEventListener('click', () => {
     photosRender();
+    photosLoadFromTable();
     $('wtOverlay').classList.add('is-open');
     document.body.style.overflow = 'hidden';
   });
@@ -3473,6 +3501,7 @@ img, video, canvas, svg { max-width: 100%; }
     // Skip if the placeholder values are still in place (local-only mode)
     if (SUPABASE_URL.indexOf('PASTE-') === 0 || SUPABASE_KEY.indexOf('PASTE-') === 0) return;
     pcSupa = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    photosLoadFromTable();
     try {
       const { data, error } = await pcSupa
         .from('app_state').select('data').eq('key', APP_KEY).maybeSingle();
