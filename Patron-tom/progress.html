@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="manifest" href="manifest.webmanifest" />
-<meta name="theme-color" content="#0C0C12" />
+<meta name="theme-color" content="#020203" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -35,11 +35,11 @@ img{max-width:100%;height:auto}
  * ============================================================ */
 :root{
   color-scheme:dark;
-  --bg:#0C0C12;--bg-elevated:#15151F;
+  --bg:#020203;--bg-elevated:#0C0C10;
   --surface:rgba(255,255,255,0.028);--surface-2:rgba(255,255,255,0.055);
   --fg:#F3F2F8;--muted:rgba(243,242,248,.50);--muted-strong:rgba(243,242,248,.74);
   --border:rgba(255,255,255,.08);--border-strong:rgba(255,255,255,.17);
-  --brand:#8B7CFF;--brand-2:#C7BBFF;--brand-ink:#130E2E;--brand-soft:rgba(139,124,255,.12);--brand-line:rgba(139,124,255,.28);--brand-glow:rgba(139,124,255,.42);
+  --brand:#00E8FF;--brand-2:#7FF4FF;--brand-ink:#001A1F;--brand-soft:rgba(0,232,255,.08);--brand-line:rgba(0,232,255,.26);--brand-glow:rgba(0,232,255,.35);
   --pos:#46E0A8;--neg:#FB7185;--warn:#FBBF24;
   --mint:var(--brand);--mint-hover:var(--brand-2);--mint-glow:var(--brand-glow);--amber:var(--warn);--red:var(--neg);
   --card:var(--surface);--card-elevated:var(--surface-2);
@@ -50,7 +50,7 @@ img{max-width:100%;height:auto}
   --duration-fast:120ms;--duration:200ms;
   --font-inter:'Hanken Grotesk';--font-serif:'Space Grotesk';--font-mono:'JetBrains Mono';
 }
-[data-theme="aurora"]{color-scheme:dark;--bg:#080913;--bg-elevated:#12131F;--surface:rgba(150,160,255,.045);--surface-2:rgba(150,160,255,.08);--fg:#EEF0FF;--muted:rgba(220,225,255,.52);--muted-strong:rgba(220,225,255,.76);--border:rgba(150,160,255,.11);--border-strong:rgba(150,160,255,.22);--brand:#8B7BFF;--brand-2:#B9ABFF;--brand-ink:#0A0922;--brand-soft:rgba(139,123,255,.15);--brand-line:rgba(139,123,255,.32);--brand-glow:rgba(124,107,255,.6);--pos:#4FE3D0;--neg:#FF6FA5;--warn:#FFC65C;}
+[data-theme="aurora"]{color-scheme:dark;--bg:#020203;--bg-elevated:#0C0C10;--surface:rgba(0,232,255,.03);--surface-2:rgba(0,232,255,.05);--fg:#EEF0FF;--muted:rgba(220,225,255,.52);--muted-strong:rgba(220,225,255,.76);--border:rgba(0,232,255,.10);--border-strong:rgba(0,232,255,.20);--brand:#00E8FF;--brand-2:#7FF4FF;--brand-ink:#001A1F;--brand-soft:rgba(0,232,255,.08);--brand-line:rgba(0,232,255,.26);--brand-glow:rgba(0,232,255,.35);--pos:#4FE3D0;--neg:#FF6FA5;--warn:#FFC65C;}
 [data-theme="daylight"]{color-scheme:light;--bg:#F3F2FA;--bg-elevated:#FFFFFF;--surface:#FFFFFF;--surface-2:#FAF9FF;--fg:#171622;--muted:rgba(23,22,34,.52);--muted-strong:rgba(23,22,34,.72);--border:rgba(23,22,60,.10);--border-strong:rgba(23,22,60,.18);--brand:#6A45FF;--brand-2:#8E6BFF;--brand-ink:#FFFFFF;--brand-soft:rgba(106,69,255,.08);--brand-line:rgba(106,69,255,.24);--brand-glow:rgba(106,69,255,.28);--pos:#0E9E64;--neg:#E11D63;--warn:#B4690E;}
 *{box-sizing:border-box}html,body{margin:0;padding:0}
 body{background:var(--bg);color:var(--fg);font-family:var(--font-inter),-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
@@ -238,7 +238,6 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font-inter),-apple-s
 <input id="fileInput" type="file" accept="image/*" class="hiddenInput" />
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="db.js?v=15"></script>
-<script src="cloud-sync.js?v=15"></script>
 <script>
 /* ===================== Helpers ===================== */
 function getLocalDateKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -258,15 +257,75 @@ function compress(dataUrl,maxDim,q){return new Promise(res=>{const img=new Image
 
 const CHART_WINDOW=30,AVG_WINDOW=7;
 
-/* ===================== Static demo data (workout-fed in hosted app) ===================== */
-const LIFTS=[
-  {id:'l1',exerciseName:'Barbell bench',kind:'pr_reps',currentReps:7,previousReps:5,currentWeightKg:85,previousWeightKg:85},
-  {id:'l2',exerciseName:'Barbell bench',kind:'pr_weight',currentWeightKg:85,previousWeightKg:80,currentReps:5,previousReps:5},
-  {id:'l3',exerciseName:'Back squat',kind:'pr_weight',currentWeightKg:120,previousWeightKg:115,currentReps:5,previousReps:5},
-  {id:'l4',exerciseName:'Deadlift',kind:'pr_reps',currentReps:6,previousReps:4,currentWeightKg:140,previousWeightKg:140},
-  {id:'l5',exerciseName:'Overhead press',kind:'regress_weight',currentWeightKg:50,previousWeightKg:55,currentReps:5,previousReps:5},
-];
-const COMPOSITION={phase:'recomp',weightSlopeKgPerWeek:0,volumeTrendPct:143,estimatedLeanKgPerWeek:null,estimatedFatKgPerWeek:null,windowDays:28,confidence:30};
+/* ===================== Real gym data — loaded from Gym's localStorage ===================== */
+function estimate1RMGym(w,r){if(r<2)return w;return w*(1+r/30);}
+function loadGymLifts(){
+  try{
+    const raw=localStorage.getItem('po_coach_v1');if(!raw)return[];
+    const gs=JSON.parse(raw);
+    const exercises=gs.exercises||[];const logs=gs.logs||{};
+    const cutoff=new Date();cutoff.setDate(cutoff.getDate()-90);
+    const lifts=[];
+    exercises.forEach(ex=>{
+      const all=(logs[ex.id]||[]).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+      if(all.length<2)return;
+      const recent=all.filter(l=>new Date(l.date)>=cutoff);
+      const before=all.filter(l=>new Date(l.date)<cutoff);
+      if(!recent.length||!before.length)return;
+      const best=arr=>arr.reduce((b,l)=>{const rm=estimate1RMGym(l.weight,l.reps);return rm>b.rm?{rm,weight:l.weight,reps:l.reps}:b},{rm:0,weight:0,reps:0});
+      const r=best(recent),p=best(before);
+      if(r.rm===0||p.rm===0)return;
+      if(r.weight>p.weight) lifts.push({id:ex.id,exerciseName:ex.name,kind:'pr_weight',currentWeightKg:r.weight,previousWeightKg:p.weight,currentReps:r.reps,previousReps:p.reps});
+      else if(r.reps>p.reps&&r.weight>=p.weight) lifts.push({id:ex.id,exerciseName:ex.name,kind:'pr_reps',currentReps:r.reps,previousReps:p.reps,currentWeightKg:r.weight,previousWeightKg:p.weight});
+      else if(r.rm<p.rm*0.95) lifts.push({id:ex.id,exerciseName:ex.name,kind:'regress_weight',currentWeightKg:r.weight,previousWeightKg:p.weight,currentReps:r.reps,previousReps:p.reps});
+    });
+    return lifts;
+  }catch(e){return[];}
+}
+function computeGymComposition(){
+  try{
+    const raw=localStorage.getItem('po_coach_v1');if(!raw)return null;
+    const gs=JSON.parse(raw);const exercises=gs.exercises||[];const logs=gs.logs||{};
+    const windowDays=28;const cutoff=new Date();cutoff.setDate(cutoff.getDate()-windowDays);
+    const entries=sortedEntries();if(entries.length<2)return null;
+    const startE=entries.find(e=>parseKey(e.dateKey)>=cutoff)||entries[0];
+    const endE=entries[entries.length-1];
+    if(startE===endE)return null;
+    const actualDays=Math.max(1,Math.round((parseKey(endE.dateKey)-parseKey(startE.dateKey))/86400000));
+    const weeks=actualDays/7;
+    const weightDelta=endE.weightKg-startE.weightKg;
+    const weightSlopeKgPerWeek=weightDelta/weeks;
+    let ratios=[],totalVol=0;
+    exercises.forEach(ex=>{
+      const all=(logs[ex.id]||[]).slice();
+      const inWin=all.filter(l=>new Date(l.date)>=cutoff);
+      const before=all.filter(l=>new Date(l.date)<cutoff);
+      inWin.forEach(l=>{totalVol+=(l.weight||0)*(l.reps||0);});
+      if(!inWin.length||!before.length)return;
+      const avg=arr=>arr.reduce((s,l)=>s+estimate1RMGym(l.weight,l.reps),0)/arr.length;
+      const a=avg(before),b=avg(inWin);if(a>0)ratios.push(b/a);
+    });
+    const strengthDelta=ratios.length?(ratios.reduce((s,r)=>s+r,0)/ratios.length)-1:0;
+    const volumeTrendPct=totalVol>0?strengthDelta*100:null;
+    const maxMusclePerWeek=0.23;
+    const strengthBoost=Math.max(0.5,Math.min(1.5,1+strengthDelta*4));
+    let estMuscle=maxMusclePerWeek*weeks*strengthBoost,estFat=null;
+    if(weightDelta>0){estMuscle=Math.min(estMuscle,weightDelta);estFat=Math.max(0,weightDelta-estMuscle);}
+    else if(weightDelta<0){estFat=weightDelta;estMuscle=Math.max(0,-weightDelta*strengthBoost*0.5)*-1;}
+    let phase='insufficient';
+    if(entries.length>=4){
+      if(Math.abs(weightSlopeKgPerWeek)<0.1&&strengthDelta>0.02)phase='recomp';
+      else if(weightSlopeKgPerWeek>0.1&&strengthDelta>0)phase='bulking';
+      else if(weightSlopeKgPerWeek>0.1)phase='fat_gain';
+      else if(weightSlopeKgPerWeek<-0.1&&strengthDelta>=-0.02)phase='cutting';
+      else if(weightSlopeKgPerWeek<-0.1)phase='losing';
+      else phase='holding';
+    }
+    return{phase,weightSlopeKgPerWeek,volumeTrendPct,estimatedLeanKgPerWeek:estMuscle||null,estimatedFatKgPerWeek:estFat,windowDays,confidence:Math.min(100,entries.length*8+ratios.length*6)};
+  }catch(e){return null;}
+}
+const PHASE_LABEL={recomp:'Recomping',bulking:'Bulking',fat_gain:'Fat gain',cutting:'Cutting',losing:'Losing both',holding:'Holding',insufficient:'Calibrating'};
+const PHASE_SUB={recomp:'lifts up, weight steady, likely swapping fat for muscle',bulking:'weight up, lifts up. the gains are mostly muscle',fat_gain:'weight up, lifts flat. most of the gain is fat',cutting:'weight down, lifts preserved. fat loss with muscle held',losing:'weight down, lifts down. losing both',holding:'weight + lifts both steady. maintenance phase',insufficient:'log a few more weeks of weight + training to unlock this'};
 const PHASE_LABEL={recomp:'Recomping',bulking:'Bulking',fat_gain:'Fat gain',cutting:'Cutting',losing:'Losing both',holding:'Holding',insufficient:'Calibrating'};
 const PHASE_SUB={recomp:'lifts up, weight steady, likely swapping fat for muscle',bulking:'weight up, lifts up. the gains are mostly muscle',fat_gain:'weight up, lifts flat. most of the gain is fat',cutting:'weight down, lifts preserved. fat loss with muscle held',losing:'weight down, lifts down. losing both',holding:'weight + lifts both steady. maintenance phase',insufficient:'log a few more weeks of weight + training to unlock this'};
 
@@ -366,13 +425,15 @@ function liftItem(s){
   return '<span class="tickerItem '+(isPR?'tickerItemUp':'tickerItemDown')+'"><span class="tickerArrow">'+arrow+'</span><span class="tickerName">'+esc(s.exerciseName)+'</span><span class="tickerSep">·</span><span class="tickerBody">'+body+'</span></span>';
 }
 function trainingHtml(){
+  const LIFTS=loadGymLifts();
   if(!LIFTS.length)return '';
   const items=LIFTS.map(s=>liftItem(s)).join('');
   return '<section class="section"><div class="sectionEyebrow">training · last 90 days</div>'
     +'<div class="ticker"><div class="tickerBadge"><span class="tickerBadgeDot"></span>lifts</div><div class="tickerViewport"><div class="tickerTrack">'+items+items+'</div></div></div></section>';
 }
 function compHtml(){
-  const c=COMPOSITION,u=state.units;
+  const c=computeGymComposition();if(!c)return '';
+  const u=state.units;
   const wDisp=kgToDisplay(c.weightSlopeKgPerWeek,u);
   const lean=c.estimatedLeanKgPerWeek==null?null:kgToDisplay(c.estimatedLeanKgPerWeek,u);
   const fat=c.estimatedFatKgPerWeek==null?null:kgToDisplay(c.estimatedFatKgPerWeek,u);
@@ -389,7 +450,7 @@ function compHtml(){
     +'<div class="compCard"><div><span class="compPhaseWord">'+PHASE_LABEL[c.phase]+'</span></div><p class="compPhaseSub">'+PHASE_SUB[c.phase]+'</p>'
     +(c.phase!=='insufficient'?'<div class="compPillRow">'+pillHtml+'</div>':'')
     +'<p class="compCaveat">estimate · not a body-fat measurement'+(c.confidence<35?' · low data':'')+'</p></div>'
-    +'<p class="noteLine">Lifts + composition read from your workout logs in the hosted app — shown here as a sample.</p></section>';
+    +'</section>';
 }
 
 /* ===================== Render: photos ===================== */
@@ -413,7 +474,7 @@ function applyTheme(name){if(!THEMES.some(t=>t.key===name))name='nocturne';curre
 function themeSegHtml(){return '<div class="themeSeg" role="radiogroup" aria-label="Theme">'+THEMES.map(t=>'<button type="button" class="themeBtn '+(t.key===currentTheme?'themeBtnActive':'')+'" data-act="theme" data-theme="'+t.key+'" title="'+t.label+'"><span class="themeSwatch" style="background:'+t.swatch+'"></span></button>').join('')+'</div>';}
 function render(){
   document.getElementById('app').innerHTML=
-    '<header class="header"><a class="back" href="index.html"><span class="backArrow">←</span> Rowan</a>'
+    '<header class="header"><a class="back" href="index.html"><span class="backArrow">←</span> YOUR NAME</a>'
     +'<div class="headerRow"><h1 class="title">Progress</h1><div class="unitSeg"><button class="unitBtn '+(state.units==='kg'?'unitBtnActive':'')+'" data-act="units" data-u="kg">kg</button><button class="unitBtn '+(state.units==='lb'?'unitBtnActive':'')+'" data-act="units" data-u="lb">lb</button></div>'+themeSegHtml()+'</div>'
     +'<p class="subtitle">weight log · progress photos</p></header>'
     +heroHtml()+trainingHtml()+compHtml()+photosHtml();

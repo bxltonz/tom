@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="manifest" href="manifest.webmanifest" />
-<meta name="theme-color" content="#0C0C12" />
+<meta name="theme-color" content="#020203" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -34,10 +34,10 @@ img{max-width:100%;height:auto}
  * ============================================================ */
 :root{
   color-scheme: dark;
-  --bg:#0C0C12;--bg-elevated:#15151F;--fg:#F3F2F8;
-  --brand:#8B7CFF;--brand-2:#C7BBFF;--brand-ink:#130E2E;
-  --brand-soft:rgba(139,124,255,0.12);--brand-line:rgba(139,124,255,0.28);--brand-glow:rgba(139,124,255,0.42);
-  --accent:#8B7CFF;--mint:#8B7CFF;--mint-hover:#9d90ff;--mint-glow:rgba(139,124,255,0.42);
+  --bg:#020203;--bg-elevated:#0C0C10;--fg:#F3F2F8;
+  --brand:#00E8FF;--brand-2:#7FF4FF;--brand-ink:#001A1F;
+  --brand-soft:rgba(0,232,255,0.08);--brand-line:rgba(0,232,255,0.26);--brand-glow:rgba(0,232,255,0.35);
+  --accent:#00E8FF;--mint:#00E8FF;--mint-hover:#7FF4FF;--mint-glow:rgba(0,232,255,0.35);
   --pos:#46E0A8;--pos-soft:rgba(70,224,168,0.12);--pos-line:rgba(70,224,168,0.26);
   --amber:#FBBF24;--red:#FB7185;
   --muted:rgba(243,242,248,0.50);--muted-strong:rgba(243,242,248,0.74);
@@ -45,7 +45,7 @@ img{max-width:100%;height:auto}
   --card:rgba(255,255,255,0.028);--card-elevated:rgba(255,255,255,0.055);
   --track:rgba(255,255,255,0.06);
   --card-shadow:0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 44px -30px rgba(0,0,0,0.85);
-  --glow-1:rgba(139,124,255,0.12);--glow-2:rgba(70,224,168,0.05);--grain-opacity:0.05;
+  --glow-1:rgba(0,232,255,0.10);--glow-2:rgba(70,224,168,0.05);--grain-opacity:0.05;
   --ring-track:rgba(255,255,255,0.06);
   --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-16:4rem;
   --radius-sm:8px;--radius-md:11px;--radius-lg:16px;--radius-pill:999px;
@@ -56,10 +56,10 @@ img{max-width:100%;height:auto}
 }
 [data-theme="aurora"]{
   color-scheme: dark;
-  --bg:#080913;--bg-elevated:#12131F;--fg:#EEF0FF;
-  --brand:#8B7BFF;--brand-2:#B9ABFF;--brand-ink:#0A0922;
-  --brand-soft:rgba(139,123,255,0.15);--brand-line:rgba(139,123,255,0.32);--brand-glow:rgba(124,107,255,0.6);
-  --accent:#8B7BFF;--mint:#8B7BFF;--mint-hover:#a59bff;--mint-glow:rgba(124,107,255,0.6);
+  --bg:#020203;--bg-elevated:#0C0C10;--fg:#EEF0FF;
+  --brand:#00E8FF;--brand-2:#7FF4FF;--brand-ink:#001A1F;
+  --brand-soft:rgba(0,232,255,0.08);--brand-line:rgba(0,232,255,0.26);--brand-glow:rgba(0,232,255,0.35);
+  --accent:#00E8FF;--mint:#00E8FF;--mint-hover:#7FF4FF;--mint-glow:rgba(0,232,255,0.35);
   --pos:#4FE3D0;--pos-soft:rgba(79,227,208,0.13);--pos-line:rgba(79,227,208,0.28);
   --amber:#FFC65C;--red:#FF6FA5;
   --muted:rgba(220,225,255,0.52);--muted-strong:rgba(220,225,255,0.76);
@@ -67,7 +67,7 @@ img{max-width:100%;height:auto}
   --card:rgba(150,160,255,0.045);--card-elevated:rgba(150,160,255,0.08);
   --track:rgba(160,170,255,0.09);
   --card-shadow:0 0 0 1px rgba(140,130,255,0.05) inset, 0 22px 56px -28px rgba(78,60,210,0.55);
-  --glow-1:rgba(124,107,255,0.20);--glow-2:rgba(79,227,208,0.13);--grain-opacity:0.05;
+  --glow-1:rgba(0,232,255,0.12);--glow-2:rgba(79,227,208,0.08);--grain-opacity:0.05;
   --ring-track:rgba(160,170,255,0.10);
 }
 [data-theme="daylight"]{
@@ -314,7 +314,7 @@ const DOW_S=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 function headerHtml(){
   const d=new Date();
-  return '<header class="header"><div class="headerLeft"><a class="back" href="index.html"><span class="backArrow">←</span> Rowan</a>'
+  return '<header class="header"><div class="headerLeft"><a class="back" href="index.html"><span class="backArrow">←</span> YOUR NAME</a>'
     +'<span class="dayPill">'+DOW[d.getDay()]+', '+MON[d.getMonth()]+' '+d.getDate()+'</span>'
     +'<h1 class="title">Water</h1><p class="subtitle">Daily hydration · personal target</p></div>'
     +'<div class="headerRight">'+themeSegHtml()+'<button class="gearBtn" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></header>';
@@ -451,6 +451,5 @@ applyTheme(currentTheme);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="db.js?v=15"></script>
-<script src="cloud-sync.js?v=15"></script>
 </body>
 </html>

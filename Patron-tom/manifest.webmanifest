@@ -1,13 +1,13 @@
 {
-  "name": "Patron — Rowan",
+  "name": "Patron — YOUR NAME",
   "short_name": "Patron",
   "description": "Your personal health, training, finance & creator dashboard.",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0C0C12",
-  "theme_color": "#0C0C12",
+  "background_color": "#020203",
+  "theme_color": "#020203",
   "icons": [
     { "src": "icon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
     { "src": "icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
