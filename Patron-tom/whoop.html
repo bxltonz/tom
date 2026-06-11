@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -708,7 +708,7 @@ function fitbitConnectBodyHtml() {
     ? '<a class="btn btn-primary connectCta" href="/api/fitbit/login">Connect Fitbit</a>'
       + '<p class="setupNote"><strong>Setup note:</strong> needs your Fitbit API keys set on the host (see <em>FITBIT_SETUP.md</em>). Then this is a real one-tap sign-in -- sleep, HRV, resting HR &amp; your bed/wake times sync automatically.</p>'
     : '<p class="setupNote"><strong>Setup note:</strong> live Fitbit sync runs on the deployed app (Vercel) with your Fitbit keys. Opened locally, use <strong>Apple Health</strong> to enter numbers by hand.</p>';
-  return "<p class=""connectIntro"">Bring your <em>sleep</em>, <em>HRV</em>, and <em>resting HR</em> into YOUR NAME. One tap. Sign in with Fitbit, allow access, you're back here.</p>"
+  return '<p class="connectIntro">Bring your <em>sleep</em>, <em>HRV</em>, and <em>resting HR</em> into YOUR NAME. One tap. Sign in with Fitbit, allow access, you're back here.</p>'
     + '<p class="connectSub">We never see your Fitbit password. You can disconnect anytime. Fitbit has no recovery score, so that ring stays blank - everything else fills in.</p>'
     + cta;
 }
