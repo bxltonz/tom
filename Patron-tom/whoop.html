@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -27,7 +27,7 @@ img{max-width:100%;height:auto}
 <style>
 
 /* ============================================================
- * Whoop — restyled to "Patron": soft-dark electric-violet
+ * Whoop -- restyled to "Patron": soft-dark electric-violet
  * modern-fintech skin. Same token system + 3 themes as the suite.
  * Violet = brand/UI chrome + headline numbers; good=green,
  * watch=amber, low=red for health-signal tones. Logic untouched.
@@ -286,7 +286,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--font-ui), -ap
 
 <script>
 /* ============================================================
- * SAMPLE DATA — matches the Rowan WhoopData shape.
+ * SAMPLE DATA -- matches the Rowan WhoopData shape.
  * Replace this object (or feed it from a real sync) once the
  * server-side WHOOP OAuth flow is wired up.
  * ============================================================ */
@@ -295,7 +295,7 @@ const SLEEP_TARGET = 8;
 const SAMPLE = {
   date: 'today',
   recovery: 92,
-  hrv: 218,            // out of the valid 15–150 range → flagged
+  hrv: 218,            // out of the valid 15-150 range → flagged
   rhr: 32,
   sleepPerf: 85,
   sleepHours: 7 + 40 / 60,   // 7h 40m
@@ -327,7 +327,7 @@ function recoveryTone(r) {
   return 'low';
 }
 function formatHM(h) {
-  if (h == null) return '—';
+  if (h == null) return '--';
   const hh = Math.floor(h);
   const mm = Math.round((h - hh) * 60);
   return hh + 'h ' + String(mm).padStart(2, '0') + 'm';
@@ -435,7 +435,7 @@ function recoveryHeroHtml(d) {
   const stepX = hasTrend ? w / (trend.length - 1) : 0;
   const pts = trend.map((v, i) => (i * stepX).toFixed(1) + ',' + (h - ((v - min) / range) * h * 0.85 - h * 0.075).toFixed(1)).join(' ');
   const trendDelta = hasTrend ? trend[trend.length - 1] - trend[0] : 0;
-  const recoveryTier = r != null ? (r >= 67 ? 'Recovered' : r >= 34 ? 'Building' : 'Drained') : '—';
+  const recoveryTier = r != null ? (r >= 67 ? 'Recovered' : r >= 34 ? 'Building' : 'Drained') : '--';
   const circ = 2 * Math.PI * 92;
 
   let dots = '';
@@ -458,7 +458,7 @@ function recoveryHeroHtml(d) {
     +   '<svg viewBox="0 0 200 200" class="ringSvg" aria-hidden="true"><circle cx="100" cy="100" r="92" class="ringTrack" />'
     +     (r != null ? '<circle cx="100" cy="100" r="92" class="ringFill" style="stroke-dasharray: ' + circ + '; stroke-dashoffset: ' + (circ * (1 - r / 100)) + ';" />' : '')
     +   '</svg>'
-    +   '<div class="recoveryInner"><div class="recoveryValue">' + (r != null ? Math.round(r) : '—') + '</div>'
+    +   '<div class="recoveryInner"><div class="recoveryValue">' + (r != null ? Math.round(r) : '--') + '</div>'
     +     '<div class="recoveryUnit">' + (r != null ? '%' : '') + '</div>'
     +     '<div class="recoveryLabel">Recovery</div><div class="recoveryTier">' + recoveryTier + '</div></div>'
     + '</div></div>'
@@ -480,16 +480,16 @@ function statGridHtml(d) {
   const rhrDelta = (d.rhr != null && d.rhrBaseline != null) ? Math.round(d.rhr - d.rhrBaseline) : null;
   const sleepDelta = (d.sleepPerf != null && d.sleepPerfBaseline != null) ? Math.round((d.sleepPerf - d.sleepPerfBaseline) * 10) / 10 : null;
   return '<div class="grid">'
-    + statHtml('Sleep', formatHM(d.sleepHours), '', d.sleepPerf != null ? Math.round(d.sleepPerf) + '% efficiency' : '—',
+    + statHtml('Sleep', formatHM(d.sleepHours), '', d.sleepPerf != null ? Math.round(d.sleepPerf) + '% efficiency' : '--',
         sleepDelta != null ? (sleepDelta >= 0 ? '↗ +' + sleepDelta + '%' : '↘ ' + sleepDelta + '%') : null,
         sleepDelta != null && sleepDelta >= 0 ? 'good' : 'watch')
-    + statHtml('Strain', d.strain != null ? d.strain.toFixed(1) : '—', '', 'today',
+    + statHtml('Strain', d.strain != null ? d.strain.toFixed(1) : '--', '', 'today',
         d.strainWeeklyAvg != null ? 'wk avg ' + d.strainWeeklyAvg.toFixed(1) : null,
         (d.strainWeeklyAvg != null && d.strain != null && d.strain > d.strainWeeklyAvg + 1) ? 'watch' : 'neutral')
-    + statHtml('HRV', d.hrv != null ? String(Math.round(d.hrv)) : '—', 'ms', d.hrvAnomalous ? 'reading flagged' : 'rmssd',
+    + statHtml('HRV', d.hrv != null ? String(Math.round(d.hrv)) : '--', 'ms', d.hrvAnomalous ? 'reading flagged' : 'rmssd',
         hrvDelta != null ? (hrvDelta >= 0 ? '↑ +' + hrvDelta + ' ms' : '↓ ' + hrvDelta + ' ms') : null,
         hrvDelta != null && hrvDelta >= 0 ? 'good' : 'watch')
-    + statHtml('RHR', d.rhr != null ? String(Math.round(d.rhr)) : '—', 'bpm', 'resting',
+    + statHtml('RHR', d.rhr != null ? String(Math.round(d.rhr)) : '--', 'bpm', 'resting',
         rhrDelta != null ? (rhrDelta <= 0 ? '↓ ' + rhrDelta + ' bpm' : '↑ +' + rhrDelta + ' bpm') : null,
         rhrDelta != null && rhrDelta <= 0 ? 'good' : 'watch')
     + '</div>';
@@ -543,7 +543,7 @@ function coachHtml(d) {
 }
 
 /* ============================================================
- * STATE — connected toggle (placeholder for real OAuth)
+ * STATE -- connected toggle (placeholder for real OAuth)
  * ============================================================ */
 const LS_KEY = 'whoop_standalone_connected_v1';
 // Publish a small metrics snapshot to a shared key so sibling standalones
@@ -563,7 +563,7 @@ function publishWhoopData(d) {
 }
 function clearWhoopData() {
   try { localStorage.removeItem(WHOOP_SHARE_KEY); } catch (e) {}
-  // Only clear the shared record if Whoop owns it — never wipe manually-entered vitals.
+  // Only clear the shared record if Whoop owns it -- never wipe manually-entered vitals.
   try { const cur = JSON.parse(localStorage.getItem(HEALTH_KEY) || 'null'); if (cur && cur.source === 'whoop') localStorage.removeItem(HEALTH_KEY); } catch (e) {}
 }
 function publishFitbitData(d) {
@@ -582,7 +582,7 @@ function clearFitbitData() {
 }
 
 /* ---- Apple Health (manual entry, tagged Apple Watch) ----
- * Apple HealthKit has no web API — a browser can't read it directly — so the
+ * Apple HealthKit has no web API -- a browser can't read it directly -- so the
  * honest path is the same one the dashboard uses: the user copies today's
  * numbers in by hand, and they publish into the suite under HEALTH_KEY. */
 let appleData = null;     // saved manual snapshot, or null
@@ -706,7 +706,7 @@ function sourceTabsHtml() {
 function fitbitConnectBodyHtml() {
   const cta = ON_SERVER
     ? '<a class="btn btn-primary connectCta" href="/api/fitbit/login">Connect Fitbit</a>'
-      + '<p class="setupNote"><strong>Setup note:</strong> needs your Fitbit API keys set on the host (see <em>FITBIT_SETUP.md</em>). Then this is a real one-tap sign-in — sleep, HRV, resting HR &amp; your bed/wake times sync automatically.</p>'
+      + '<p class="setupNote"><strong>Setup note:</strong> needs your Fitbit API keys set on the host (see <em>FITBIT_SETUP.md</em>). Then this is a real one-tap sign-in -- sleep, HRV, resting HR &amp; your bed/wake times sync automatically.</p>'
     : '<p class="setupNote"><strong>Setup note:</strong> live Fitbit sync runs on the deployed app (Vercel) with your Fitbit keys. Opened locally, use <strong>Apple Health</strong> to enter numbers by hand.</p>';
   return "<p class=""connectIntro"">Bring your <em>sleep</em>, <em>HRV</em>, and <em>resting HR</em> into YOUR NAME. One tap. Sign in with Fitbit, allow access, you're back here.</p>"
     + '<p class="connectSub">We never see your Fitbit password. You can disconnect anytime. Fitbit has no recovery score, so that ring stays blank - everything else fills in.</p>'
@@ -725,14 +725,14 @@ function appleFormHtml() {
   return '<p class="connectIntro">Add today's <em>recovery</em>, <em>sleep</em> &amp; <em>HRV</em> from Apple Health. They feed the same dashboard and supplement picks as Whoop.</p>'
     + savedNote
     + '<div class="fieldGrid">'
-    + appleFieldHtml('a-rec', 'Recovery / readiness %', '—', v('recovery'), 'min="0" max="100" inputmode="numeric"')
+    + appleFieldHtml('a-rec', 'Recovery / readiness %', '--', v('recovery'), 'min="0" max="100" inputmode="numeric"')
     + appleFieldHtml('a-sleep', 'Sleep (hours)', '7.5', v('sleepHours'), 'min="0" max="24" step="0.1" inputmode="decimal"')
-    + appleFieldHtml('a-hrv', 'HRV (ms)', '—', v('hrv'), 'min="0" max="300" inputmode="numeric"')
-    + appleFieldHtml('a-rhr', 'Resting HR (bpm)', '—', v('rhr'), 'min="20" max="150" inputmode="numeric"')
-    + appleFieldHtml('a-strain', 'Strain (0–21, optional)', '—', v('strain'), 'min="0" max="21" step="0.1" inputmode="decimal"')
+    + appleFieldHtml('a-hrv', 'HRV (ms)', '--', v('hrv'), 'min="0" max="300" inputmode="numeric"')
+    + appleFieldHtml('a-rhr', 'Resting HR (bpm)', '--', v('rhr'), 'min="20" max="150" inputmode="numeric"')
+    + appleFieldHtml('a-strain', 'Strain (0-21, optional)', '--', v('strain'), 'min="0" max="21" step="0.1" inputmode="decimal"')
     + appleFieldHtml('a-target', 'Sleep target (hours)', '8', (a.sleepTargetHours != null ? a.sleepTargetHours : 8), 'min="4" max="12" step="0.5" inputmode="decimal"', true)
     + '</div>'
-    + '<p class="setupNote"><strong>Setup note:</strong> Apple Health has no web API — a browser can't read HealthKit directly. Open the Health app, copy today's <em>HRV</em>, <em>resting HR</em> &amp; <em>time asleep</em> in here. Saved into the suite tagged <strong>Apple Watch</strong>.</p>'
+    + '<p class="setupNote"><strong>Setup note:</strong> Apple Health has no web API -- a browser can't read HealthKit directly. Open the Health app, copy today's <em>HRV</em>, <em>resting HR</em> &amp; <em>time asleep</em> in here. Saved into the suite tagged <strong>Apple Watch</strong>.</p>'
     + '<div class="formActions">'
     + (appleData ? '<button type="button" class="btn btn-link" data-action="remove-apple">remove</button>' : '')
     + '<button type="button" class="btn btn-primary" data-action="save-apple">Save readings</button></div>';
@@ -741,9 +741,9 @@ function appleFormHtml() {
 function whoopConnectBodyHtml() {
   const cta = ON_SERVER
     ? '<a class="btn btn-primary connectCta" href="/api/whoop/login">Connect Whoop</a>'
-      + '<p class="setupNote"><strong>Setup note:</strong> needs your WHOOP API keys set on the host (see <em>WHOOP_SETUP.md</em>). Then this is a real one-tap sign-in — recovery, sleep &amp; strain sync automatically.</p>'
+      + '<p class="setupNote"><strong>Setup note:</strong> needs your WHOOP API keys set on the host (see <em>WHOOP_SETUP.md</em>). Then this is a real one-tap sign-in -- recovery, sleep &amp; strain sync automatically.</p>'
     : '<button type="button" class="btn btn-primary connectCta" data-action="connect">Preview with sample data</button>'
-      + '<p class="setupNote"><strong>Setup note:</strong> live WHOOP sync runs on the deployed app. Opened locally, tap above to preview the dashboard with sample numbers — these are <em>not</em> saved into the suite.</p>';
+      + '<p class="setupNote"><strong>Setup note:</strong> live WHOOP sync runs on the deployed app. Opened locally, tap above to preview the dashboard with sample numbers -- these are <em>not</em> saved into the suite.</p>';
   return '<p class="connectIntro">Bring your <em>recovery</em>, <em>sleep</em>, and <em>strain</em> into YOUR NAME. One tap. Sign in with Whoop, allow access, you\'re back here.</p>'
     + '<p class="connectSub">We never see your Whoop password. You can disconnect anytime.</p>'
     + cta;
@@ -785,7 +785,7 @@ function render() {
   else if (!ON_SERVER && connected) { d = SAMPLE; kind = 'sample'; }
   activeKind = kind;
 
-  // ONLY ever publish real live data into the suite — and only the active source.
+  // ONLY ever publish real live data into the suite -- and only the active source.
   if (kind === 'whoop-live') publishWhoopData(liveData);
   else if (kind === 'fitbit-live') publishFitbitData(fitbitData);
 
@@ -845,8 +845,8 @@ applyTheme(currentTheme);
     const w = q.get('whoop'), f = q.get('fitbit');
     if (w || f) {
       history.replaceState(null, '', location.pathname);
-      if (w === 'error' || w === 'denied') alert('Whoop connection didn't complete — check the host's WHOOP keys & redirect URL (WHOOP_SETUP.md).');
-      if (f === 'error' || f === 'denied') alert('Fitbit connection didn't complete — check the host's FITBIT keys & redirect URL (FITBIT_SETUP.md).');
+      if (w === 'error' || w === 'denied') alert('Whoop connection didn't complete -- check the host's WHOOP keys & redirect URL (WHOOP_SETUP.md).');
+      if (f === 'error' || f === 'denied') alert('Fitbit connection didn't complete -- check the host's FITBIT keys & redirect URL (FITBIT_SETUP.md).');
       if (f === 'connected') connectSource = 'fitbit';
     }
   } catch (e) {}
