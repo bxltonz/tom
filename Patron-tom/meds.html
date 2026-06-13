@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Liam" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <link rel="icon" type="image/svg+xml" href="icon.svg" />
-<title>Meds Â· Liam</title>
+<title>Meds · Liam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=JetBrains+Mono:wght@400;500;600&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -106,9 +106,9 @@ body{ background:var(--bg); color:var(--fg); font-family:var(--ui); -webkit-font
 <script src="db.js?v=15"></script>
 <script>
 /* ============================================================
- * MEDS & SUBSTANCES â log any prescription / nicotine / nootropic,
+ * MEDS & SUBSTANCES — log any prescription / nicotine / nootropic,
  * now or back-dated ("I took it at 9:14"), cancel accidental taps, and
- * see live onset â peak â comedown â wear-off from a PK model.
+ * see live onset → peak → comedown → wear-off from a PK model.
  * Shares storage with the Peak tracker (peak_meds_v1).
  * ============================================================ */
 function readLS(k){ try{ const r=localStorage.getItem(k); return r?JSON.parse(r):null; }catch(e){ return null; } }
@@ -116,7 +116,7 @@ function profile(){ return readLS('patron_profile_v1'); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function clamp(x,a,b){ return Math.max(a,Math.min(b,x)); }
 
-/* Profiles: onset (first effect), tPeak (peak), dur (â duration), lift (peak focus
+/* Profiles: onset (first effect), tPeak (peak), dur (≈ duration), lift (peak focus
  * points at the reference dose), ref (mg). Population estimates from published PK. */
 const SUB_DB=[
   {name:'Concerta',mg:36,ref:36,onset:1,tPeak:7,dur:12,lift:30,cat:'rx'},
@@ -152,7 +152,7 @@ function allSubs(){ return customs().concat(SUB_DB); }
 function dayKey(d){ d=d||new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function fmtClock(ms){ const d=new Date(ms); let h=d.getHours(),m=d.getMinutes(); const ap=h<12?'am':'pm'; h=h%12||12; return h+':'+String(m).padStart(2,'0')+ap; }
 
-/* PK: smooth onsetâpeakâexp decay, normalized to peak=1 at tPeak */
+/* PK: smooth onset→peak→exp decay, normalized to peak=1 at tPeak */
 function subNorm(tau,tPeak,dur){ if(tau<0)return 0; tPeak=tPeak||1; dur=dur||4; if(tau<=tPeak)return 0.5-0.5*Math.cos(Math.PI*tau/tPeak); const decay=Math.max(0.3,(dur-tPeak)/2.2); return Math.exp(-(tau-tPeak)/decay); }
 function effectOf(l,nowMs){ const tau=(nowMs-l.t)/3600000; const dose=Math.min(2.2,(l.mg||l.ref||1)/(l.ref||l.mg||1)); return (l.lift||15)*dose*subNorm(tau,l.tPeak,l.dur); }
 function boardNow(){ const n=Date.now(); return state.logs.reduce((s,l)=>s+effectOf(l,n),0); }
@@ -190,16 +190,16 @@ function doseHtml(l){
   const ph=phaseOf(l); const eff=Math.round(effectOf(l,Date.now()));
   const tau=(Date.now()-l.t)/3600000; const dur=l.dur||4;
   const leftH=Math.max(0,dur-tau); const leftTxt=leftH>=1?Math.round(leftH)+'h':Math.round(leftH*60)+'m';
-  const info = ph.k==='off' ? 'Worn off â logged '+fmtClock(l.t)+'.' :
-    'Now <b>+'+eff+'</b> focus Â· '+(ph.k==='fade'?'comedown, ':'')+'~<b>'+leftTxt+'</b> of effect left.';
-  return '<div class="dose"><div class="doseTop"><div class="doseName">'+esc(l.name)+'<small>'+Math.round(l.mg)+'mg</small></div><div class="doseX" data-rm="'+esc(l.id||'')+'" title="Cancel">Ã</div></div>'
+  const info = ph.k==='off' ? 'Worn off — logged '+fmtClock(l.t)+'.' :
+    'Now <b>+'+eff+'</b> focus · '+(ph.k==='fade'?'comedown, ':'')+'~<b>'+leftTxt+'</b> of effect left.';
+  return '<div class="dose"><div class="doseTop"><div class="doseName">'+esc(l.name)+'<small>'+Math.round(l.mg)+'mg</small></div><div class="doseX" data-rm="'+esc(l.id||'')+'" title="Cancel">×</div></div>'
     +'<span class="dosePhase '+ph.k+'">'+ph.t+'</span>'
     + timelineHtml(l)
     +'<div class="doseInfo">'+info+'</div></div>';
 }
 
 /* ---------- search ---------- */
-function resultsHtml(q){ q=(q||'').trim().toLowerCase(); if(!q)return ''; const m=allSubs().filter(d=>String(d.name).toLowerCase().includes(q)).slice(0,8); if(!m.length)return '<div class="noMatch">No match â add it as a custom below â</div>'; return m.map(d=>'<div class="result" data-medname="'+esc(d.name)+'"><span class="resultName">'+esc(d.name)+'</span><span class="resultMg">'+d.mg+'mg <em>peak +'+Math.round(d.lift)+'</em></span></div>').join(''); }
+function resultsHtml(q){ q=(q||'').trim().toLowerCase(); if(!q)return ''; const m=allSubs().filter(d=>String(d.name).toLowerCase().includes(q)).slice(0,8); if(!m.length)return '<div class="noMatch">No match — add it as a custom below ↓</div>'; return m.map(d=>'<div class="result" data-medname="'+esc(d.name)+'"><span class="resultName">'+esc(d.name)+'</span><span class="resultMg">'+d.mg+'mg <em>peak +'+Math.round(d.lift)+'</em></span></div>').join(''); }
 
 /* ---------- render ---------- */
 function render(){
@@ -215,21 +215,21 @@ function render(){
     +'<div class="timeRow"><span class="timeLab">Taken</span>'
     +'<button class="nowBtn'+(nowSel?' on':'')+'" id="nowBtn">Just now</button>'
     +'<span class="timeLab">or at</span><input class="timeIn" id="timeIn" type="time" value="'+timeVal+'"></div>'
-    +'<div class="searchWrap">'+searchIcon+'<input class="searchIn" id="search" type="text" placeholder="Search any med, pouch, nootropicâ¦" value="'+esc(query)+'" autocomplete="off"></div>'
+    +'<div class="searchWrap">'+searchIcon+'<input class="searchIn" id="search" type="text" placeholder="Search any med, pouch, nootropic…" value="'+esc(query)+'" autocomplete="off"></div>'
     +'<div class="results" id="results">'+resultsHtml(query)+'</div>'
     +'<div class="chips">'+chips+'</div>'
-    +'<div class="addRow"><input class="addName" id="custName" placeholder="Add a custom med/substanceâ¦"><input class="addMg" id="custMg" type="number" inputmode="numeric" placeholder="mg"><button class="addBtn" data-addcust="1">Add</button></div>'
+    +'<div class="addRow"><input class="addName" id="custName" placeholder="Add a custom med/substance…"><input class="addMg" id="custMg" type="number" inputmode="numeric" placeholder="mg"><button class="addBtn" data-addcust="1">Add</button></div>'
     +'</div>';
 
   const doseCard = logs.length
-    ? '<div class="card"><p class="eyebrow">Todayâs doses</p>'+logs.map(doseHtml).join('')+'</div>'
-    : '<div class="card"><div class="empty">No doses logged today. Tap a med above (now or back-dated) and youâll see exactly when it peaks, comes down, and wears off.</div></div>';
+    ? '<div class="card"><p class="eyebrow">Today’s doses</p>'+logs.map(doseHtml).join('')+'</div>'
+    : '<div class="card"><div class="empty">No doses logged today. Tap a med above (now or back-dated) and you’ll see exactly when it peaks, comes down, and wears off.</div></div>';
 
   document.getElementById('app').innerHTML=
-    '<div class="top"><div><h1 class="htitle">Your <em>meds</em></h1><p class="hsub">onset Â· peak Â· comedown Â· clearance</p></div><a class="backLink" href="peak.html">â Peak</a></div>'
+    '<div class="top"><div><h1 class="htitle">Your <em>meds</em></h1><p class="hsub">onset · peak · comedown · clearance</p></div><a class="backLink" href="peak.html">← Peak</a></div>'
     +'<div class="card"><div class="hero"><div class="heroV">'+(board>0?'+'+board:'0')+'<small> focus on board</small></div><div class="heroR">'+logs.length+' dose'+(logs.length===1?'':'s')+' today</div></div></div>'
     + logCard + doseCard
-    +'<p class="foot">Estimated from population pharmacokinetics + your profile â informational only, never dosing advice. Shares data with your Peak tracker.</p>';
+    +'<p class="foot">Estimated from population pharmacokinetics + your profile — informational only, never dosing advice. Shares data with your Peak tracker.</p>';
   bindSearch();
 }
 function bindSearch(){ const s=document.getElementById('search'); if(s)s.addEventListener('input',()=>{ query=s.value; const r=document.getElementById('results'); if(r)r.innerHTML=resultsHtml(query); });
