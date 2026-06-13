@@ -159,6 +159,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--font-ui), -ap
 .artProgress { background: linear-gradient(145deg,#001A10,#002C1C,#004028); box-shadow: inset 0 0 50px rgba(60,240,160,0.07); }
 .artMacros    { background: linear-gradient(145deg,#120800,#201000,#2C1800); box-shadow: inset 0 0 50px rgba(255,160,0,0.07); }
 .artCaffeine  { background: linear-gradient(145deg,#080300,#130800,#1E0D00); box-shadow: inset 0 0 50px rgba(200,120,30,0.09); }
+.artPeak      { background: linear-gradient(145deg,#001A12,#002E20,#004030); box-shadow: inset 0 0 50px rgba(52,211,153,0.09); }
+.artMeds      { background: linear-gradient(145deg,#001A12,#002E20,#004030); box-shadow: inset 0 0 50px rgba(34,211,238,0.09); }
 /* daylight: override dark art area with neutral */
 [data-theme="daylight"] .cardArt { background: var(--surface); }
 
@@ -288,6 +290,8 @@ const APPS = [
   { file: 'progress.html',    name: 'Progress',    tag: 'Photos & measurements',                 icon: '📈' },
   { file: 'macros.html',      name: 'Macros',      tag: 'Protein · carbs · fat',                 icon: '🍳' },
   { file: 'caffeine.html',   name: 'Caffeine',   tag: 'Track intake · timing · crash',         icon: '☕' },
+  { file: 'peak.html',      name: 'Peak',       tag: 'Daily readiness · energy curve',        icon: '🔆', wide: true },
+  { file: 'meds.html',      name: 'Meds',       tag: 'Doses · peak & comedown timing',        icon: '💊' },
 ];
 
 /* ============================================================
@@ -455,7 +459,9 @@ const ART_CLASS = {
   'finance.html':'artFinance','gym.html':'artGym','supplements.html':'artSupps',
   'whoop.html':'artFitness','water.html':'artWater','creator.html':'artCreator',
   'goals.html':'artGoals','progress.html':'artProgress','macros.html':'artMacros',
-  'caffeine.html':'artCaffeine'
+  'caffeine.html':'artCaffeine',
+  'peak.html':'artPeak',
+  'meds.html':'artMeds'
 };
 function cardHtml(a){
   const st = statFor(a.file);
